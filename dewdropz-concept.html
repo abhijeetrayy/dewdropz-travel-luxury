@@ -1,0 +1,1530 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>DEWDROPZ — Feel Alive</title>
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link href="https://fonts.googleapis.com/css2?family=Cormorant+Garamond:ital,wght@0,300;0,400;0,500;0,600;1,300;1,400;1,500&family=DM+Sans:opsz,wght@9..40,300;9..40,400;9..40,500;9..40,600&display=swap" rel="stylesheet">
+  <style>
+    *, *::before, *::after { margin: 0; padding: 0; box-sizing: border-box; }
+
+    :root {
+      --black:     #06060A;
+      --ink:       #0E0E14;
+      --forest:    #132B1D;
+      --green:     #1A3E28;
+      --cream:     #F0EBE1;
+      --warm:      #FAF8F3;
+      --earth:     #8B7355;
+      --gold:      #C4A452;
+      --gold-dark: #A8893E;
+      --lite:      #E4DDD1;
+      --mute:      #8A837A;
+    }
+
+    html { scroll-behavior: smooth; }
+    body {
+      font-family: 'DM Sans', sans-serif;
+      background: var(--black);
+      color: var(--lite);
+      overflow-x: hidden;
+      cursor: none;
+    }
+
+    /* ── CURSOR ─────────────────────────────── */
+    #cursor-dot {
+      position: fixed;
+      width: 8px; height: 8px;
+      background: var(--gold);
+      border-radius: 50%;
+      pointer-events: none;
+      z-index: 9999;
+      transform: translate(-50%,-50%);
+      transition: transform 0.1s ease, opacity 0.3s;
+      mix-blend-mode: screen;
+    }
+    #cursor-ring {
+      position: fixed;
+      width: 36px; height: 36px;
+      border: 1px solid rgba(196,164,82,0.5);
+      border-radius: 50%;
+      pointer-events: none;
+      z-index: 9998;
+      transform: translate(-50%,-50%);
+      transition: all 0.18s ease;
+    }
+    #cursor-glow {
+      position: fixed;
+      width: 480px; height: 480px;
+      border-radius: 50%;
+      background: radial-gradient(circle, rgba(196,164,82,0.06) 0%, transparent 65%);
+      pointer-events: none;
+      z-index: 1;
+      transform: translate(-50%,-50%);
+      transition: left 0.4s ease, top 0.4s ease;
+    }
+
+    /* ── ANNOUNCE BAR ───────────────────────── */
+    .announce {
+      background: var(--forest);
+      text-align: center;
+      padding: 10px 24px;
+      font-size: 11px;
+      letter-spacing: 0.18em;
+      text-transform: uppercase;
+      color: rgba(240,235,225,0.7);
+      border-bottom: 1px solid rgba(255,255,255,0.04);
+    }
+    .announce span { color: var(--gold); }
+
+    /* ── NAV ────────────────────────────────── */
+    #navbar {
+      position: fixed;
+      top: 36px; left: 0; right: 0;
+      z-index: 500;
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      padding: 24px 52px;
+      transition: all 0.45s ease;
+    }
+    #navbar.scrolled {
+      top: 0;
+      padding: 14px 52px;
+      background: rgba(6,6,10,0.9);
+      backdrop-filter: blur(20px);
+      border-bottom: 1px solid rgba(240,235,225,0.06);
+    }
+    .nav-logo {
+      font-family: 'Cormorant Garamond', serif;
+      font-size: 20px; font-weight: 500;
+      letter-spacing: 0.28em;
+      color: var(--cream);
+      text-decoration: none;
+      text-transform: uppercase;
+    }
+    .nav-links {
+      display: flex; gap: 44px; list-style: none;
+    }
+    .nav-links a {
+      font-size: 11px; letter-spacing: 0.18em;
+      text-transform: uppercase;
+      color: rgba(228,221,209,0.7);
+      text-decoration: none;
+      transition: color 0.2s;
+      position: relative;
+    }
+    .nav-links a::after {
+      content: '';
+      position: absolute;
+      bottom: -4px; left: 0; right: 0;
+      height: 1px; background: var(--gold);
+      transform: scaleX(0);
+      transition: transform 0.3s ease;
+    }
+    .nav-links a:hover { color: var(--cream); }
+    .nav-links a:hover::after { transform: scaleX(1); }
+    .nav-right { display: flex; align-items: center; gap: 28px; }
+    .nav-icon { color: rgba(228,221,209,0.7); transition: color 0.2s; display: flex; align-items: center; }
+    .nav-icon:hover { color: var(--cream); }
+
+    /* ── HERO ───────────────────────────────── */
+    .hero {
+      position: relative;
+      height: 100vh; min-height: 760px;
+      overflow: hidden;
+      display: flex; align-items: flex-end;
+    }
+    .hero-bg {
+      position: absolute; inset: 0;
+      background-image: url('https://images.unsplash.com/photo-1506905925346-21bda4d32df4?w=1920&q=90&fit=crop&crop=center');
+      background-size: cover;
+      background-position: center 35%;
+      animation: kenBurns 20s ease-in-out infinite alternate;
+    }
+    @keyframes kenBurns {
+      from { transform: scale(1); }
+      to   { transform: scale(1.06); }
+    }
+    .hero-overlay {
+      position: absolute; inset: 0;
+      background: linear-gradient(
+        to top,
+        rgba(6,6,10,0.97) 0%,
+        rgba(6,6,10,0.55) 32%,
+        rgba(6,6,10,0.15) 60%,
+        rgba(6,6,10,0.05) 100%
+      );
+    }
+    .hero-content {
+      position: relative; z-index: 2;
+      padding: 0 52px 88px;
+      max-width: 880px;
+    }
+    .hero-eyebrow {
+      display: flex; align-items: center; gap: 18px;
+      font-size: 10px; letter-spacing: 0.32em;
+      text-transform: uppercase; color: var(--gold);
+      margin-bottom: 28px;
+      opacity: 0; animation: fadeUp 1s ease 0.3s forwards;
+    }
+    .hero-eyebrow::before {
+      content: ''; display: block;
+      width: 44px; height: 1px; background: var(--gold);
+    }
+    .hero-headline {
+      font-family: 'Cormorant Garamond', serif;
+      font-size: clamp(88px, 12vw, 160px);
+      font-weight: 300; line-height: 0.86;
+      letter-spacing: -0.03em;
+      color: var(--cream);
+      margin-bottom: 36px;
+      opacity: 0; animation: fadeUp 1s ease 0.5s forwards;
+    }
+    .hero-headline em { font-style: italic; }
+    .hero-sub {
+      font-size: 15px; font-weight: 300;
+      line-height: 1.8; color: var(--mute);
+      max-width: 400px; margin-bottom: 52px;
+      opacity: 0; animation: fadeUp 1s ease 0.7s forwards;
+    }
+    .hero-actions {
+      display: flex; align-items: center; gap: 32px;
+      opacity: 0; animation: fadeUp 1s ease 0.9s forwards;
+    }
+    .hero-side {
+      position: absolute; right: 52px; bottom: 88px;
+      z-index: 2; writing-mode: vertical-rl;
+      font-size: 10px; letter-spacing: 0.25em;
+      text-transform: uppercase; color: var(--mute);
+      display: flex; align-items: center; gap: 16px;
+    }
+    .hero-side::after {
+      content: ''; width: 1px; height: 60px;
+      background: linear-gradient(to bottom, var(--mute), transparent);
+    }
+
+    /* ── BUTTONS ────────────────────────────── */
+    .btn-primary {
+      display: inline-block;
+      padding: 15px 40px;
+      background: var(--cream); color: var(--black);
+      font-size: 11px; font-weight: 500;
+      letter-spacing: 0.18em; text-transform: uppercase;
+      text-decoration: none;
+      position: relative; overflow: hidden;
+      transition: color 0.3s;
+    }
+    .btn-primary::before {
+      content: ''; position: absolute;
+      inset: 0; background: var(--gold);
+      transform: translateX(-100%);
+      transition: transform 0.35s ease;
+      z-index: 0;
+    }
+    .btn-primary:hover::before { transform: translateX(0); }
+    .btn-primary span { position: relative; z-index: 1; }
+
+    .btn-ghost {
+      display: inline-flex; align-items: center; gap: 12px;
+      font-size: 11px; letter-spacing: 0.18em;
+      text-transform: uppercase;
+      color: rgba(228,221,209,0.6);
+      text-decoration: none; transition: color 0.2s;
+    }
+    .btn-ghost:hover { color: var(--cream); }
+
+    .btn-dark {
+      display: inline-block;
+      padding: 14px 36px;
+      background: var(--black); color: var(--cream);
+      font-size: 11px; font-weight: 500;
+      letter-spacing: 0.18em; text-transform: uppercase;
+      text-decoration: none;
+      position: relative; overflow: hidden;
+      transition: color 0.3s;
+    }
+    .btn-dark::before {
+      content: ''; position: absolute; inset: 0;
+      background: var(--earth);
+      transform: translateX(-100%);
+      transition: transform 0.35s ease; z-index: 0;
+    }
+    .btn-dark:hover::before { transform: translateX(0); }
+    .btn-dark span { position: relative; z-index: 1; }
+
+    /* ── ANIMATIONS ─────────────────────────── */
+    @keyframes fadeUp {
+      from { opacity: 0; transform: translateY(28px); }
+      to   { opacity: 1; transform: translateY(0); }
+    }
+    .reveal {
+      opacity: 0; transform: translateY(36px);
+      transition: opacity 0.8s ease, transform 0.8s ease;
+    }
+    .reveal.visible { opacity: 1; transform: translateY(0); }
+    .reveal-delay-1 { transition-delay: 0.1s; }
+    .reveal-delay-2 { transition-delay: 0.2s; }
+    .reveal-delay-3 { transition-delay: 0.3s; }
+    .reveal-delay-4 { transition-delay: 0.4s; }
+    .reveal-left {
+      opacity: 0; transform: translateX(-40px);
+      transition: opacity 0.9s ease, transform 0.9s ease;
+    }
+    .reveal-left.visible { opacity: 1; transform: translateX(0); }
+    .reveal-right {
+      opacity: 0; transform: translateX(40px);
+      transition: opacity 0.9s ease, transform 0.9s ease;
+    }
+    .reveal-right.visible { opacity: 1; transform: translateX(0); }
+
+    /* ── MARQUEE ────────────────────────────── */
+    .marquee-strip {
+      background: var(--green);
+      padding: 14px 0; overflow: hidden;
+      border-top: 1px solid rgba(255,255,255,0.04);
+      border-bottom: 1px solid rgba(255,255,255,0.04);
+    }
+    .marquee-track {
+      display: flex; white-space: nowrap;
+      animation: marquee 24s linear infinite;
+    }
+    .marquee-item {
+      display: inline-flex; align-items: center; gap: 28px;
+      padding: 0 28px;
+      font-size: 10px; letter-spacing: 0.25em;
+      text-transform: uppercase; color: rgba(240,235,225,0.5);
+    }
+    .mdot {
+      display: inline-block;
+      width: 3px; height: 3px; border-radius: 50%;
+      background: var(--gold); flex-shrink: 0;
+    }
+    @keyframes marquee {
+      from { transform: translateX(0); }
+      to   { transform: translateX(-50%); }
+    }
+
+    /* ── STORY ──────────────────────────────── */
+    .story {
+      display: grid; grid-template-columns: 1fr 1fr;
+      background: var(--warm);
+    }
+    .story-img {
+      position: relative; overflow: hidden; min-height: 700px;
+    }
+    .story-img img {
+      width: 100%; height: 100%; object-fit: cover;
+      display: block;
+      transition: transform 1s ease;
+    }
+    .story-img:hover img { transform: scale(1.04); }
+    .story-caption {
+      position: absolute; bottom: 24px; left: 24px;
+      font-size: 10px; letter-spacing: 0.15em;
+      text-transform: uppercase; color: rgba(240,235,225,0.65);
+      background: rgba(6,6,10,0.55);
+      padding: 6px 14px;
+      backdrop-filter: blur(8px);
+    }
+    .story-content {
+      padding: 100px 88px;
+      display: flex; flex-direction: column;
+      justify-content: center;
+    }
+    .story-label {
+      font-size: 10px; letter-spacing: 0.3em;
+      text-transform: uppercase; color: var(--earth);
+      margin-bottom: 20px;
+    }
+    .story-title {
+      font-family: 'Cormorant Garamond', serif;
+      font-size: clamp(44px, 4.5vw, 70px);
+      font-weight: 300; line-height: 1.04;
+      color: #0A0A0E; margin-bottom: 36px;
+    }
+    .story-title em { font-style: italic; }
+    .story-body {
+      font-size: 15px; font-weight: 300;
+      line-height: 1.95; color: #3E3C38;
+      max-width: 420px; margin-bottom: 18px;
+    }
+    .story-stats {
+      display: flex; gap: 48px;
+      padding-top: 48px; margin-top: 48px;
+      border-top: 1px solid rgba(0,0,0,0.08);
+    }
+    .stat-n {
+      font-family: 'Cormorant Garamond', serif;
+      font-size: 48px; font-weight: 300;
+      color: #0A0A0E; line-height: 1;
+    }
+    .stat-n sup { font-size: 20px; vertical-align: super; }
+    .stat-l {
+      font-size: 11px; letter-spacing: 0.08em;
+      color: #999; margin-top: 8px;
+    }
+
+    /* ── PRODUCT SHOWCASE (alternating) ─────── */
+    .products { background: var(--black); }
+
+    .products-header {
+      padding: 100px 52px 0;
+      display: flex; justify-content: space-between;
+      align-items: flex-end;
+    }
+    .products-title {
+      font-family: 'Cormorant Garamond', serif;
+      font-size: clamp(52px, 6vw, 96px);
+      font-weight: 300; line-height: 0.95;
+      color: var(--cream);
+    }
+    .products-title span { font-style: italic; }
+    .section-label {
+      font-size: 10px; letter-spacing: 0.3em;
+      text-transform: uppercase; color: var(--gold);
+      margin-bottom: 14px;
+    }
+    .link-all {
+      font-size: 11px; letter-spacing: 0.2em;
+      text-transform: uppercase; color: var(--mute);
+      text-decoration: none;
+      display: flex; align-items: center; gap: 10px;
+      border-bottom: 1px solid rgba(138,131,122,0.3);
+      padding-bottom: 4px;
+      transition: color 0.2s, border-color 0.2s;
+    }
+    .link-all:hover { color: var(--cream); border-color: var(--cream); }
+
+    .product-row {
+      display: grid; grid-template-columns: 60% 40%;
+      min-height: 70vh;
+      transition: all 0.3s;
+    }
+    .product-row.flipped { grid-template-columns: 40% 60%; }
+    .product-row.flipped .prod-img { order: 2; }
+    .product-row.flipped .prod-info { order: 1; }
+
+    .prod-img {
+      position: relative; overflow: hidden;
+    }
+    .prod-img img {
+      width: 100%; height: 100%; object-fit: cover;
+      display: block; filter: brightness(0.88);
+      transition: transform 0.9s cubic-bezier(0.25,0.46,0.45,0.94),
+                  filter 0.5s ease;
+    }
+    .product-row:hover .prod-img img {
+      transform: scale(1.04); filter: brightness(0.75);
+    }
+    .prod-img-overlay {
+      position: absolute; inset: 0;
+      background: linear-gradient(to right, rgba(6,6,10,0.4), transparent);
+    }
+    .product-row.flipped .prod-img-overlay {
+      background: linear-gradient(to left, rgba(6,6,10,0.4), transparent);
+    }
+
+    .prod-info {
+      padding: 72px 64px;
+      display: flex; flex-direction: column;
+      justify-content: center;
+      border-top: 1px solid rgba(240,235,225,0.05);
+    }
+    .prod-num {
+      font-family: 'Cormorant Garamond', serif;
+      font-size: 72px; font-weight: 300;
+      color: rgba(240,235,225,0.04);
+      line-height: 1; margin-bottom: -20px;
+      display: block;
+    }
+    .prod-cat {
+      font-size: 10px; letter-spacing: 0.28em;
+      text-transform: uppercase; color: var(--gold);
+      margin-bottom: 16px;
+    }
+    .prod-name {
+      font-family: 'Cormorant Garamond', serif;
+      font-size: clamp(36px, 3.5vw, 56px);
+      font-weight: 300; line-height: 1.1;
+      color: var(--cream); margin-bottom: 20px;
+    }
+    .prod-desc {
+      font-size: 14px; font-weight: 300;
+      line-height: 1.85; color: var(--mute);
+      max-width: 340px; margin-bottom: 36px;
+    }
+    .prod-price {
+      font-family: 'Cormorant Garamond', serif;
+      font-size: 28px; font-weight: 300;
+      color: var(--cream); margin-bottom: 36px;
+    }
+    .prod-tags {
+      display: flex; gap: 10px;
+      flex-wrap: wrap; margin-bottom: 40px;
+    }
+    .prod-tag {
+      padding: 6px 16px;
+      border: 1px solid rgba(240,235,225,0.12);
+      font-size: 10px; letter-spacing: 0.15em;
+      text-transform: uppercase; color: var(--mute);
+    }
+
+    /* ── TERRAIN ────────────────────────────── */
+    .terrain {
+      display: flex; height: 92vh; min-height: 600px;
+    }
+    .terrain-card {
+      flex: 1;
+      position: relative; overflow: hidden;
+      cursor: pointer;
+      transition: flex 0.7s cubic-bezier(0.4,0,0.2,1);
+    }
+    .terrain-card:hover { flex: 2.5; }
+    .terrain-bg {
+      position: absolute; inset: 0;
+      background-size: cover; background-position: center;
+      transition: transform 0.8s ease;
+    }
+    .terrain-card:hover .terrain-bg { transform: scale(1.05); }
+    .terrain-overlay {
+      position: absolute; inset: 0;
+      background: linear-gradient(
+        to top,
+        rgba(6,6,10,0.92) 0%,
+        rgba(6,6,10,0.4) 50%,
+        rgba(6,6,10,0.1) 100%
+      );
+    }
+    .terrain-content {
+      position: absolute; bottom: 0; left: 0; right: 0;
+      padding: 48px 40px;
+    }
+    .terrain-num {
+      font-family: 'Cormorant Garamond', serif;
+      font-size: 14px; letter-spacing: 0.2em;
+      color: var(--gold); margin-bottom: 12px;
+    }
+    .terrain-title {
+      font-family: 'Cormorant Garamond', serif;
+      font-size: clamp(28px, 2.5vw, 42px);
+      font-weight: 300; color: var(--cream);
+      line-height: 1.2; margin-bottom: 14px;
+      white-space: nowrap; overflow: hidden;
+      text-overflow: ellipsis;
+    }
+    .terrain-subtitle {
+      font-size: 12px; letter-spacing: 0.12em;
+      color: rgba(228,221,209,0.55);
+      text-transform: uppercase;
+      max-height: 0; overflow: hidden;
+      transition: max-height 0.5s ease 0.2s, opacity 0.4s ease 0.2s;
+      opacity: 0;
+    }
+    .terrain-card:hover .terrain-subtitle {
+      max-height: 60px; opacity: 1;
+    }
+    .terrain-cta {
+      display: inline-block;
+      margin-top: 20px;
+      font-size: 10px; letter-spacing: 0.2em;
+      text-transform: uppercase; color: var(--gold);
+      opacity: 0;
+      transform: translateY(10px);
+      transition: opacity 0.4s ease 0.25s, transform 0.4s ease 0.25s;
+    }
+    .terrain-card:hover .terrain-cta { opacity: 1; transform: translateY(0); }
+
+    /* ── EDITORIAL FEATURE ──────────────────── */
+    .editorial {
+      position: relative;
+      height: 90vh; min-height: 640px;
+      overflow: hidden; display: flex; align-items: center;
+    }
+    .editorial-bg {
+      position: absolute; inset: 0;
+      background-image: url('https://images.unsplash.com/photo-1464822759023-fed622ff2c3b?w=1920&q=90&fit=crop&crop=center');
+      background-size: cover; background-position: center;
+    }
+    .editorial-overlay {
+      position: absolute; inset: 0;
+      background: linear-gradient(
+        105deg,
+        rgba(6,6,10,0.94) 0%,
+        rgba(6,6,10,0.65) 42%,
+        rgba(6,6,10,0.12) 100%
+      );
+    }
+    .editorial-content {
+      position: relative; z-index: 2;
+      padding: 0 52px; max-width: 660px;
+    }
+    .editorial-label {
+      display: flex; align-items: center; gap: 16px;
+      font-size: 10px; letter-spacing: 0.3em;
+      text-transform: uppercase; color: var(--gold);
+      margin-bottom: 24px;
+    }
+    .editorial-label::before {
+      content: ''; display: block;
+      width: 36px; height: 1px; background: var(--gold);
+    }
+    .editorial-title {
+      font-family: 'Cormorant Garamond', serif;
+      font-size: clamp(56px, 7vw, 112px);
+      font-weight: 300; line-height: 0.9;
+      color: var(--cream); margin-bottom: 36px;
+    }
+    .editorial-title em { font-style: italic; }
+    .editorial-body {
+      font-size: 16px; font-weight: 300;
+      line-height: 1.85; max-width: 440px;
+      color: rgba(228,221,209,0.6);
+      margin-bottom: 52px;
+    }
+
+    /* ── VALUES ─────────────────────────────── */
+    .values {
+      background: var(--forest);
+      padding: 110px 52px;
+    }
+    .values-head {
+      text-align: center; margin-bottom: 80px;
+    }
+    .values-title {
+      font-family: 'Cormorant Garamond', serif;
+      font-size: clamp(44px, 5vw, 76px);
+      font-weight: 300; color: var(--cream);
+      line-height: 1.05;
+    }
+    .values-title em { font-style: italic; }
+    .values-grid {
+      display: grid; grid-template-columns: repeat(3,1fr);
+      gap: 1px; background: rgba(255,255,255,0.05);
+    }
+    .value-cell {
+      background: var(--forest);
+      padding: 64px 52px; text-align: center;
+      transition: background 0.4s;
+    }
+    .value-cell:hover { background: var(--green); }
+    .v-icon {
+      width: 52px; height: 52px; margin: 0 auto 28px;
+      border: 1px solid rgba(196,164,82,0.3);
+      border-radius: 50%;
+      display: flex; align-items: center; justify-content: center;
+      font-size: 22px;
+    }
+    .v-name {
+      font-family: 'Cormorant Garamond', serif;
+      font-size: 30px; font-weight: 300;
+      color: var(--cream); margin-bottom: 16px;
+    }
+    .v-desc {
+      font-size: 14px; font-weight: 300;
+      line-height: 1.8; color: rgba(228,221,209,0.48);
+      max-width: 270px; margin: 0 auto;
+    }
+
+    /* ── INSTAGRAM GRID ─────────────────────── */
+    .insta {
+      background: var(--black);
+      padding: 100px 52px;
+    }
+    .insta-head {
+      text-align: center; margin-bottom: 52px;
+    }
+    .insta-title {
+      font-family: 'Cormorant Garamond', serif;
+      font-size: clamp(44px, 4.5vw, 72px);
+      font-weight: 300; color: var(--cream); line-height: 1;
+    }
+    .insta-sub {
+      font-size: 13px; font-weight: 300;
+      color: var(--mute); margin-top: 12px;
+    }
+    .insta-grid {
+      display: grid;
+      grid-template-columns: repeat(6, 1fr);
+      gap: 3px;
+    }
+    .insta-cell {
+      position: relative; overflow: hidden;
+      aspect-ratio: 1;
+      cursor: pointer;
+    }
+    .insta-cell img {
+      width: 100%; height: 100%; object-fit: cover;
+      display: block;
+      transition: transform 0.6s ease, filter 0.4s ease;
+      filter: brightness(0.8) saturate(0.9);
+    }
+    .insta-cell:hover img { transform: scale(1.1); filter: brightness(0.6); }
+    .insta-hover {
+      position: absolute; inset: 0;
+      display: flex; flex-direction: column;
+      align-items: center; justify-content: center;
+      gap: 8px;
+      opacity: 0; transition: opacity 0.3s;
+    }
+    .insta-cell:hover .insta-hover { opacity: 1; }
+    .insta-hover-icon {
+      font-size: 24px; color: var(--cream);
+    }
+    .insta-hover-text {
+      font-size: 10px; letter-spacing: 0.2em;
+      text-transform: uppercase; color: var(--cream);
+    }
+
+    /* ── JOURNAL ────────────────────────────── */
+    .journal { background: var(--warm); padding: 120px 52px; }
+    .journal-head {
+      display: flex; justify-content: space-between;
+      align-items: flex-end; margin-bottom: 60px;
+    }
+    .journal-sub {
+      font-size: 10px; letter-spacing: 0.3em;
+      text-transform: uppercase; color: var(--earth);
+      margin-bottom: 12px;
+    }
+    .journal-title {
+      font-family: 'Cormorant Garamond', serif;
+      font-size: clamp(44px, 5vw, 80px);
+      font-weight: 300; color: #09090D; line-height: 1;
+    }
+    .journal-grid {
+      display: grid; grid-template-columns: 1.5fr 1fr 1fr;
+      gap: 36px;
+    }
+    .j-card { cursor: pointer; }
+    .j-img {
+      overflow: hidden; margin-bottom: 22px;
+      position: relative;
+    }
+    .j-card:first-child .j-img { aspect-ratio: 16/10; }
+    .j-card:not(:first-child) .j-img { aspect-ratio: 4/3; }
+    .j-img img {
+      width: 100%; height: 100%; object-fit: cover;
+      display: block; transition: transform 0.7s ease;
+    }
+    .j-card:hover .j-img img { transform: scale(1.05); }
+    .j-cat {
+      font-size: 10px; letter-spacing: 0.22em;
+      text-transform: uppercase; color: var(--earth);
+      margin-bottom: 10px;
+    }
+    .j-title {
+      font-family: 'Cormorant Garamond', serif;
+      font-weight: 400; color: #09090D;
+      line-height: 1.3; margin-bottom: 12px;
+    }
+    .j-card:first-child .j-title { font-size: 30px; }
+    .j-card:not(:first-child) .j-title { font-size: 22px; }
+    .j-excerpt {
+      font-size: 13px; font-weight: 300;
+      line-height: 1.78; color: #666;
+    }
+
+    /* ── TESTIMONIAL ────────────────────────── */
+    .testimonial {
+      background: var(--ink);
+      padding: 110px 52px;
+      text-align: center;
+      position: relative; overflow: hidden;
+    }
+    .testimonial-label {
+      font-size: 10px; letter-spacing: 0.3em;
+      text-transform: uppercase; color: var(--gold);
+      margin-bottom: 40px;
+    }
+    .testimonial-quote {
+      font-family: 'Cormorant Garamond', serif;
+      font-size: clamp(28px, 3.5vw, 52px);
+      font-weight: 300; font-style: italic;
+      line-height: 1.4; color: var(--cream);
+      max-width: 880px; margin: 0 auto 40px;
+    }
+    .testimonial-quote::before { content: '"'; color: var(--gold); }
+    .testimonial-quote::after  { content: '"'; color: var(--gold); }
+    .testimonial-attr {
+      font-size: 12px; letter-spacing: 0.2em;
+      text-transform: uppercase; color: var(--mute);
+    }
+    .testimonial-dots {
+      display: flex; justify-content: center;
+      gap: 8px; margin-top: 48px;
+    }
+    .t-dot {
+      width: 6px; height: 6px; border-radius: 50%;
+      background: rgba(196,164,82,0.3);
+      cursor: pointer; transition: background 0.2s;
+    }
+    .t-dot.active { background: var(--gold); }
+    .testimonial-nav {
+      display: flex; justify-content: center;
+      gap: 24px; margin-top: 32px;
+    }
+    .t-btn {
+      width: 44px; height: 44px;
+      border: 1px solid rgba(240,235,225,0.15);
+      background: transparent; color: var(--mute);
+      cursor: pointer; display: flex;
+      align-items: center; justify-content: center;
+      transition: all 0.2s;
+    }
+    .t-btn:hover { border-color: var(--cream); color: var(--cream); }
+
+    /* ── NEWSLETTER ─────────────────────────── */
+    .newsletter {
+      background: var(--black);
+      padding: 150px 52px;
+      text-align: center;
+      position: relative; overflow: hidden;
+    }
+    .newsletter-bg {
+      position: absolute; inset: 0;
+      background:
+        radial-gradient(ellipse 80% 60% at 50% 100%, rgba(26,62,40,0.35) 0%, transparent 70%),
+        radial-gradient(ellipse 60% 40% at 20% 0%, rgba(196,164,82,0.04) 0%, transparent 60%);
+    }
+    .newsletter-watermark {
+      position: absolute; top: 50%; left: 50%;
+      transform: translate(-50%, -50%);
+      font-family: 'Cormorant Garamond', serif;
+      font-size: clamp(100px, 18vw, 260px);
+      font-weight: 300; letter-spacing: 0.05em;
+      color: rgba(240,235,225,0.02);
+      white-space: nowrap; pointer-events: none;
+    }
+    .nl-inner { position: relative; z-index: 2; }
+    .nl-label {
+      font-size: 10px; letter-spacing: 0.3em;
+      text-transform: uppercase; color: var(--gold);
+      margin-bottom: 24px;
+    }
+    .nl-title {
+      font-family: 'Cormorant Garamond', serif;
+      font-size: clamp(56px, 8vw, 116px);
+      font-weight: 300; line-height: 0.88;
+      color: var(--cream); margin-bottom: 28px;
+    }
+    .nl-title em { font-style: italic; }
+    .nl-sub {
+      font-size: 15px; font-weight: 300;
+      line-height: 1.75; color: var(--mute);
+      max-width: 380px; margin: 0 auto 52px;
+    }
+    .nl-form {
+      display: flex; max-width: 460px; margin: 0 auto;
+    }
+    .nl-form input {
+      flex: 1; padding: 15px 24px;
+      background: transparent;
+      border: 1px solid rgba(240,235,225,0.15);
+      border-right: none;
+      color: var(--cream);
+      font-family: 'DM Sans', sans-serif;
+      font-size: 14px; font-weight: 300;
+      outline: none; transition: border-color 0.2s;
+    }
+    .nl-form input:focus { border-color: rgba(240,235,225,0.38); }
+    .nl-form input::placeholder { color: var(--mute); }
+    .nl-form button {
+      padding: 15px 32px;
+      background: var(--cream); color: var(--black);
+      border: none;
+      font-family: 'DM Sans', sans-serif;
+      font-size: 10px; font-weight: 500;
+      letter-spacing: 0.18em; text-transform: uppercase;
+      cursor: pointer; transition: background 0.25s;
+    }
+    .nl-form button:hover { background: var(--gold); }
+
+    /* ── FOOTER ─────────────────────────────── */
+    footer {
+      background: var(--black);
+      border-top: 1px solid rgba(240,235,225,0.05);
+      padding: 80px 52px 44px;
+    }
+    .footer-grid {
+      display: grid; grid-template-columns: 2fr 1fr 1fr 1fr;
+      gap: 72px; margin-bottom: 72px;
+    }
+    .footer-logo {
+      font-family: 'Cormorant Garamond', serif;
+      font-size: 22px; font-weight: 500;
+      letter-spacing: 0.25em; color: var(--cream);
+      text-transform: uppercase;
+      text-decoration: none; display: block;
+      margin-bottom: 18px;
+    }
+    .footer-tagline {
+      font-family: 'Cormorant Garamond', serif;
+      font-size: 19px; font-style: italic;
+      font-weight: 300; color: var(--mute);
+      margin-bottom: 24px;
+    }
+    .footer-about {
+      font-size: 13px; font-weight: 300;
+      line-height: 1.85; color: var(--mute);
+      margin-bottom: 32px;
+    }
+    .footer-socials { display: flex; gap: 12px; }
+    .footer-socials a {
+      width: 36px; height: 36px;
+      border: 1px solid rgba(240,235,225,0.1);
+      display: flex; align-items: center; justify-content: center;
+      color: var(--mute); text-decoration: none;
+      font-size: 11px; font-weight: 500;
+      transition: all 0.2s;
+    }
+    .footer-socials a:hover { border-color: var(--cream); color: var(--cream); }
+    .footer-col-title {
+      font-size: 10px; letter-spacing: 0.25em;
+      text-transform: uppercase; color: var(--cream);
+      margin-bottom: 24px;
+    }
+    .footer-links { list-style: none; display: flex; flex-direction: column; gap: 13px; }
+    .footer-links a {
+      font-size: 13px; font-weight: 300;
+      color: var(--mute); text-decoration: none;
+      transition: color 0.2s;
+    }
+    .footer-links a:hover { color: var(--cream); }
+    .footer-bottom {
+      display: flex; justify-content: space-between;
+      align-items: center; padding-top: 36px;
+      border-top: 1px solid rgba(240,235,225,0.05);
+    }
+    .footer-copy {
+      font-size: 12px; font-weight: 300;
+      color: rgba(138,131,122,0.55);
+    }
+    .footer-legal { display: flex; gap: 28px; }
+    .footer-legal a {
+      font-size: 12px; font-weight: 300;
+      color: rgba(138,131,122,0.55);
+      text-decoration: none; transition: color 0.2s;
+    }
+    .footer-legal a:hover { color: var(--cream); }
+
+    /* ── RESPONSIVE ─────────────────────────── */
+    @media (max-width: 960px) {
+      body { cursor: auto; }
+      #cursor-dot, #cursor-ring, #cursor-glow { display: none; }
+      #navbar { padding: 18px 24px; }
+      #navbar.scrolled { padding: 14px 24px; }
+      .nav-links { display: none; }
+      .hero-content { padding: 0 24px 64px; }
+      .hero-side { display: none; }
+      .story { grid-template-columns: 1fr; }
+      .story-img { min-height: 400px; }
+      .story-content { padding: 64px 28px; }
+      .product-row,
+      .product-row.flipped { grid-template-columns: 1fr; min-height: auto; }
+      .product-row .prod-img { aspect-ratio: 16/9; }
+      .product-row.flipped .prod-img { order: 0; }
+      .product-row.flipped .prod-info { order: 0; }
+      .prod-info { padding: 48px 28px; }
+      .products-header { padding: 80px 24px 0; flex-direction: column; align-items: flex-start; gap: 20px; }
+      .terrain { flex-direction: column; height: auto; }
+      .terrain-card { flex: none; height: 300px; }
+      .terrain-card:hover { flex: none; }
+      .values { padding: 80px 24px; }
+      .values-grid { grid-template-columns: 1fr; }
+      .insta { padding: 80px 24px; }
+      .insta-grid { grid-template-columns: repeat(3,1fr); }
+      .journal { padding: 80px 24px; }
+      .journal-grid { grid-template-columns: 1fr; }
+      .journal-head { flex-direction: column; align-items: flex-start; gap: 16px; }
+      .testimonial { padding: 80px 24px; }
+      .newsletter { padding: 100px 24px; }
+      .nl-form { flex-direction: column; }
+      .nl-form input { border-right: 1px solid rgba(240,235,225,0.15); border-bottom: none; }
+      footer { padding: 64px 24px 36px; }
+      .footer-grid { grid-template-columns: 1fr 1fr; gap: 40px; }
+      .footer-bottom { flex-direction: column; gap: 16px; text-align: center; }
+    }
+  </style>
+</head>
+<body>
+
+<!-- Custom cursor -->
+<div id="cursor-dot"></div>
+<div id="cursor-ring"></div>
+<div id="cursor-glow"></div>
+
+<!-- ═══ ANNOUNCE BAR ═══════════════════════════ -->
+<div class="announce">
+  Free shipping on orders above <span>₹999</span> &nbsp;·&nbsp; New SS25 Collection Live Now &nbsp;·&nbsp; Tested on 100+ Himalayan trails
+</div>
+
+<!-- ═══ NAV ════════════════════════════════════ -->
+<nav id="navbar">
+  <a href="#" class="nav-logo">Dewdropz</a>
+  <ul class="nav-links">
+    <li><a href="#">Shop</a></li>
+    <li><a href="#">Collections</a></li>
+    <li><a href="#">Journal</a></li>
+    <li><a href="#">Our Story</a></li>
+  </ul>
+  <div class="nav-right">
+    <span class="nav-icon">
+      <svg width="17" height="17" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5">
+        <circle cx="11" cy="11" r="8"/><line x1="21" y1="21" x2="16.65" y2="16.65"/>
+      </svg>
+    </span>
+    <span class="nav-icon">
+      <svg width="17" height="17" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5">
+        <path d="M6 2L3 6v14a2 2 0 002 2h14a2 2 0 002-2V6l-3-4z"/><line x1="3" y1="6" x2="21" y2="6"/><path d="M16 10a4 4 0 01-8 0"/>
+      </svg>
+    </span>
+  </div>
+</nav>
+
+<!-- ═══ HERO ════════════════════════════════════ -->
+<div class="hero">
+  <div class="hero-bg"></div>
+  <div class="hero-overlay"></div>
+  <div class="hero-side">Scroll to explore</div>
+  <div class="hero-content">
+    <div class="hero-eyebrow">Premium Outdoor — India</div>
+    <h1 class="hero-headline">Feel<br><em>Alive.</em></h1>
+    <p class="hero-sub">Crafted for those who seek the summit before sunrise. Engineered for the Himalayas. Built for every wild moment between.</p>
+    <div class="hero-actions">
+      <a href="#" class="btn-primary"><span>Explore Collection</span></a>
+      <a href="#" class="btn-ghost">Our Story &nbsp;→</a>
+    </div>
+  </div>
+</div>
+
+<!-- ═══ MARQUEE ══════════════════════════════════ -->
+<div class="marquee-strip">
+  <div class="marquee-track">
+    <span class="marquee-item">Engineered for Altitude <span class="mdot"></span></span>
+    <span class="marquee-item">Born in India <span class="mdot"></span></span>
+    <span class="marquee-item">Built for the Wild <span class="mdot"></span></span>
+    <span class="marquee-item">Feel Alive <span class="mdot"></span></span>
+    <span class="marquee-item">Himalayan Tested <span class="mdot"></span></span>
+    <span class="marquee-item">Trail to Summit <span class="mdot"></span></span>
+    <span class="marquee-item">Every Season, Every Peak <span class="mdot"></span></span>
+    <span class="marquee-item">Free Shipping Across India <span class="mdot"></span></span>
+    <span class="marquee-item">Engineered for Altitude <span class="mdot"></span></span>
+    <span class="marquee-item">Born in India <span class="mdot"></span></span>
+    <span class="marquee-item">Built for the Wild <span class="mdot"></span></span>
+    <span class="marquee-item">Feel Alive <span class="mdot"></span></span>
+    <span class="marquee-item">Himalayan Tested <span class="mdot"></span></span>
+    <span class="marquee-item">Trail to Summit <span class="mdot"></span></span>
+    <span class="marquee-item">Every Season, Every Peak <span class="mdot"></span></span>
+    <span class="marquee-item">Free Shipping Across India <span class="mdot"></span></span>
+  </div>
+</div>
+
+<!-- ═══ BRAND STORY ══════════════════════════════ -->
+<div class="story">
+  <div class="story-img reveal-left">
+    <img
+      src="https://images.unsplash.com/photo-1483728642387-6c3bdd6c93e5?w=960&q=88&fit=crop&crop=center"
+      alt="Misty Himalayan trail at dawn"
+      loading="lazy"
+    >
+    <span class="story-caption">Kedarkantha, Uttarakhand — 3,800m</span>
+  </div>
+  <div class="story-content reveal-right">
+    <p class="story-label">The DEWDROPZ Story</p>
+    <h2 class="story-title">Where the trail<br>meets the <em>soul.</em></h2>
+    <p class="story-body">DEWDROPZ was born on a misty ridge in Uttarakhand, where morning dew settles on cold granite and the world below disappears. We build gear for that precise moment — the one that reminds you why you left.</p>
+    <p class="story-body">Every layer, every stitch is field-tested on the trails we live on. Indian conditions. Himalayan standards. Unapologetically ours.</p>
+    <a href="#" class="btn-dark"><span>Read Our Story</span></a>
+    <div class="story-stats">
+      <div>
+        <div class="stat-n" data-target="6200">0<sup>m</sup></div>
+        <div class="stat-l">Max altitude tested</div>
+      </div>
+      <div>
+        <div class="stat-n" data-target="100">0<span style="font-size:20px">+</span></div>
+        <div class="stat-l">Trails covered</div>
+      </div>
+      <div>
+        <div class="stat-n" data-target="4">0</div>
+        <div class="stat-l">Himalayan seasons</div>
+      </div>
+    </div>
+  </div>
+</div>
+
+<!-- ═══ PRODUCT SHOWCASE ══════════════════════════ -->
+<div class="products">
+  <div class="products-header">
+    <div class="reveal">
+      <p class="section-label">SS 2025 Collection</p>
+      <h2 class="products-title">The<br><span>Gear.</span></h2>
+    </div>
+    <a href="#" class="link-all reveal reveal-delay-2">View All &nbsp;→</a>
+  </div>
+
+  <!-- Product 1 -->
+  <div class="product-row reveal">
+    <div class="prod-img">
+      <img
+        src="https://images.unsplash.com/photo-1506905925346-21bda4d32df4?w=1200&q=88&fit=crop&crop=top"
+        alt="Ridgeline Shell — Himalayan peaks above the clouds"
+        loading="lazy"
+      >
+      <div class="prod-img-overlay"></div>
+    </div>
+    <div class="prod-info">
+      <span class="prod-num">01</span>
+      <p class="prod-cat">Outerwear — New Arrival</p>
+      <h3 class="prod-name">Ridgeline<br>Shell Jacket</h3>
+      <p class="prod-desc">3-layer waterproof shell with taped seams. Wind-resistant to 80 kmph. Packable to palm size. Built for the unpredictable Himalayan weather window.</p>
+      <div class="prod-tags">
+        <span class="prod-tag">Waterproof</span>
+        <span class="prod-tag">3-Layer</span>
+        <span class="prod-tag">Packable</span>
+      </div>
+      <p class="prod-price">₹ 8,499</p>
+      <a href="#" class="btn-primary"><span>Shop Now</span></a>
+    </div>
+  </div>
+
+  <!-- Product 2 (flipped) -->
+  <div class="product-row flipped reveal">
+    <div class="prod-img">
+      <img
+        src="https://images.unsplash.com/photo-1519681393784-d120267933ba?w=1200&q=88&fit=crop&crop=center"
+        alt="Alpine Pack — mountain starfield at high altitude"
+        loading="lazy"
+      >
+      <div class="prod-img-overlay"></div>
+    </div>
+    <div class="prod-info">
+      <span class="prod-num">02</span>
+      <p class="prod-cat">Backpacks</p>
+      <h3 class="prod-name">Alpine<br>40L Pack</h3>
+      <p class="prod-desc">Hydraulics-fit back panel. Ice axe loops. Hip-belt pockets rated for -15°C. Everything you need from basecamp to the summit and back.</p>
+      <div class="prod-tags">
+        <span class="prod-tag">40 Litres</span>
+        <span class="prod-tag">Hip Belt</span>
+        <span class="prod-tag">Rain Cover</span>
+      </div>
+      <p class="prod-price">₹ 6,299</p>
+      <a href="#" class="btn-primary"><span>Shop Now</span></a>
+    </div>
+  </div>
+
+  <!-- Product 3 -->
+  <div class="product-row reveal">
+    <div class="prod-img">
+      <img
+        src="https://images.unsplash.com/photo-1500534314209-a25ddb2bd429?w=1200&q=88&fit=crop&crop=center"
+        alt="Summit Fleece — person on high altitude"
+        loading="lazy"
+      >
+      <div class="prod-img-overlay"></div>
+    </div>
+    <div class="prod-info">
+      <span class="prod-num">03</span>
+      <p class="prod-cat">Mid Layer</p>
+      <h3 class="prod-name">Summit<br>Fleece Mid</h3>
+      <p class="prod-desc">400gsm recycled fleece. Articulated patterning for full range of motion. Thumb loops. The layer you'll reach for every single time.</p>
+      <div class="prod-tags">
+        <span class="prod-tag">Recycled</span>
+        <span class="prod-tag">400gsm</span>
+        <span class="prod-tag">Stretch</span>
+      </div>
+      <p class="prod-price">₹ 4,199</p>
+      <a href="#" class="btn-primary"><span>Shop Now</span></a>
+    </div>
+  </div>
+
+  <!-- Product 4 (flipped) -->
+  <div class="product-row flipped reveal">
+    <div class="prod-img">
+      <img
+        src="https://images.unsplash.com/photo-1454496522488-7a8e488e8606?w=1200&q=88&fit=crop&crop=center"
+        alt="Trailhead Boot — mountain glacier"
+        loading="lazy"
+      >
+      <div class="prod-img-overlay"></div>
+    </div>
+    <div class="prod-info">
+      <span class="prod-num">04</span>
+      <p class="prod-cat">Footwear</p>
+      <h3 class="prod-name">Trailhead<br>Boot GTX</h3>
+      <p class="prod-desc">Gore-Tex lining. Vibram Megagrip sole. Mid-height ankle support. Tested across scree, mud, snow, and river crossings across 30+ Indian trails.</p>
+      <div class="prod-tags">
+        <span class="prod-tag">Gore-Tex</span>
+        <span class="prod-tag">Vibram</span>
+        <span class="prod-tag">Mid-Cut</span>
+      </div>
+      <p class="prod-price">₹ 9,999</p>
+      <a href="#" class="btn-primary"><span>Shop Now</span></a>
+    </div>
+  </div>
+</div>
+
+<!-- ═══ TERRAIN ════════════════════════════════════ -->
+<div class="terrain">
+  <!-- Alpine Winter -->
+  <div class="terrain-card">
+    <div class="terrain-bg" style="background-image: url('https://images.unsplash.com/photo-1519681393784-d120267933ba?w=800&q=85&fit=crop&crop=center');"></div>
+    <div class="terrain-overlay"></div>
+    <div class="terrain-content">
+      <p class="terrain-num">01 — High Alpine</p>
+      <h3 class="terrain-title">Above the<br>Clouds</h3>
+      <p class="terrain-subtitle">4000m+ · Sub-zero · Technical terrain</p>
+      <a href="#" class="terrain-cta">Shop Alpine Gear →</a>
+    </div>
+  </div>
+  <!-- Monsoon Forest -->
+  <div class="terrain-card">
+    <div class="terrain-bg" style="background-image: url('https://images.unsplash.com/photo-1441974231531-c6227db76b6e?w=800&q=85&fit=crop&crop=center');"></div>
+    <div class="terrain-overlay"></div>
+    <div class="terrain-content">
+      <p class="terrain-num">02 — Monsoon Trail</p>
+      <h3 class="terrain-title">Into the<br>Green</h3>
+      <p class="terrain-subtitle">Forest paths · Rain-ready · Western Ghats</p>
+      <a href="#" class="terrain-cta">Shop Trail Gear →</a>
+    </div>
+  </div>
+  <!-- Valley / Meadow -->
+  <div class="terrain-card">
+    <div class="terrain-bg" style="background-image: url('https://images.unsplash.com/photo-1501854140801-50d01698950b?w=800&q=85&fit=crop&crop=center');"></div>
+    <div class="terrain-overlay"></div>
+    <div class="terrain-content">
+      <p class="terrain-num">03 — Valley Trek</p>
+      <h3 class="terrain-title">Open<br>Horizons</h3>
+      <p class="terrain-subtitle">Bugyals · Meadows · Multi-day routes</p>
+      <a href="#" class="terrain-cta">Shop Valley Gear →</a>
+    </div>
+  </div>
+</div>
+
+<!-- ═══ EDITORIAL FEATURE ════════════════════════ -->
+<div class="editorial">
+  <div class="editorial-bg"></div>
+  <div class="editorial-overlay"></div>
+  <div class="editorial-content">
+    <p class="editorial-label reveal">The Field Report</p>
+    <h2 class="editorial-title reveal reveal-delay-1">High Camp,<br><em>Lower Ego.</em></h2>
+    <p class="editorial-body reveal reveal-delay-2">Our team spent 22 days above the treeline testing the new Ridge Series across three Himalayan ranges. What we found: gear is only as good as the silence it doesn't interrupt.</p>
+    <a href="#" class="btn-primary reveal reveal-delay-3"><span>Read the Report</span></a>
+  </div>
+</div>
+
+<!-- ═══ VALUES ════════════════════════════════════ -->
+<div class="values">
+  <div class="values-head reveal">
+    <p class="section-label" style="margin-bottom:20px; color:rgba(196,164,82,0.75)">Why DEWDROPZ</p>
+    <h2 class="values-title">Built different.<br><em>By those who go.</em></h2>
+  </div>
+  <div class="values-grid">
+    <div class="value-cell reveal">
+      <div class="v-icon">⛰</div>
+      <h3 class="v-name">Himalayan Tested</h3>
+      <p class="v-desc">Every product crosses real Himalayan terrain — altitude, cold, moisture, load — before it ever reaches your hands.</p>
+    </div>
+    <div class="value-cell reveal reveal-delay-1">
+      <div class="v-icon">🌿</div>
+      <h3 class="v-name">Sustainably Made</h3>
+      <p class="v-desc">Recycled shell fabrics. Low-impact dyes. Responsible sourcing from Day 1. Because the mountains deserve to outlast us.</p>
+    </div>
+    <div class="value-cell reveal reveal-delay-2">
+      <div class="v-icon">🇮🇳</div>
+      <h3 class="v-name">Proudly Indian</h3>
+      <p class="v-desc">Designed in India. For Indian terrain, Indian climates, and the Indian adventurer who's been underserved for too long.</p>
+    </div>
+  </div>
+</div>
+
+<!-- ═══ INSTAGRAM GRID ═══════════════════════════ -->
+<div class="insta">
+  <div class="insta-head reveal">
+    <p class="section-label" style="margin-bottom:16px">@dewdropz.shop</p>
+    <h2 class="insta-title">Life on<br><em>the trail.</em></h2>
+    <p class="insta-sub">Follow along on Instagram for daily dispatches from the wild.</p>
+  </div>
+  <div class="insta-grid reveal">
+    <div class="insta-cell">
+      <img src="https://images.unsplash.com/photo-1506905925346-21bda4d32df4?w=400&q=80&fit=crop&crop=center" alt="Trail shot" loading="lazy">
+      <div class="insta-hover"><span class="insta-hover-icon">♥</span><span class="insta-hover-text">View Post</span></div>
+    </div>
+    <div class="insta-cell">
+      <img src="https://images.unsplash.com/photo-1551632811-561732d1e306?w=400&q=80&fit=crop&crop=center" alt="Trail shot" loading="lazy">
+      <div class="insta-hover"><span class="insta-hover-icon">♥</span><span class="insta-hover-text">View Post</span></div>
+    </div>
+    <div class="insta-cell">
+      <img src="https://images.unsplash.com/photo-1486870591958-9b9d0d1dda99?w=400&q=80&fit=crop&crop=center" alt="Trail shot" loading="lazy">
+      <div class="insta-hover"><span class="insta-hover-icon">♥</span><span class="insta-hover-text">View Post</span></div>
+    </div>
+    <div class="insta-cell">
+      <img src="https://images.unsplash.com/photo-1469474968028-56623f02e42e?w=400&q=80&fit=crop&crop=center" alt="Trail shot" loading="lazy">
+      <div class="insta-hover"><span class="insta-hover-icon">♥</span><span class="insta-hover-text">View Post</span></div>
+    </div>
+    <div class="insta-cell">
+      <img src="https://images.unsplash.com/photo-1519681393784-d120267933ba?w=400&q=80&fit=crop&crop=center" alt="Trail shot" loading="lazy">
+      <div class="insta-hover"><span class="insta-hover-icon">♥</span><span class="insta-hover-text">View Post</span></div>
+    </div>
+    <div class="insta-cell">
+      <img src="https://images.unsplash.com/photo-1464822759023-fed622ff2c3b?w=400&q=80&fit=crop&crop=center" alt="Trail shot" loading="lazy">
+      <div class="insta-hover"><span class="insta-hover-icon">♥</span><span class="insta-hover-text">View Post</span></div>
+    </div>
+  </div>
+</div>
+
+<!-- ═══ JOURNAL ═══════════════════════════════════ -->
+<div class="journal">
+  <div class="journal-head reveal">
+    <div>
+      <p class="journal-sub">Stories from the trail</p>
+      <h2 class="journal-title">The Journal</h2>
+    </div>
+    <a href="#" style="font-size:11px;letter-spacing:0.2em;text-transform:uppercase;color:#999;text-decoration:none;transition:color 0.2s" onmouseover="this.style.color='#09090D'" onmouseout="this.style.color='#999'">All Stories →</a>
+  </div>
+  <div class="journal-grid">
+    <div class="j-card reveal">
+      <div class="j-img">
+        <img src="https://images.unsplash.com/photo-1486870591958-9b9d0d1dda99?w=960&q=85&fit=crop" alt="Har Ki Dun" loading="lazy">
+      </div>
+      <p class="j-cat">Trek Report</p>
+      <h3 class="j-title">Har Ki Dun in November: The Valley of Gods Goes Quiet</h3>
+      <p class="j-excerpt">We hiked in late season, after the crowds left and before the snow locked the valley shut. What we found was rare — a Himalayan wilderness entirely ours.</p>
+    </div>
+    <div class="j-card reveal reveal-delay-1">
+      <div class="j-img">
+        <img src="https://images.unsplash.com/photo-1551632811-561732d1e306?w=700&q=85&fit=crop" alt="Gear guide" loading="lazy">
+      </div>
+      <p class="j-cat">Gear Guide</p>
+      <h3 class="j-title">What to Pack for a 5-Day High Altitude Trek</h3>
+      <p class="j-excerpt">The difference between comfort and misery at 4,500m often comes down to three items. Our definitive list.</p>
+    </div>
+    <div class="j-card reveal reveal-delay-2">
+      <div class="j-img">
+        <img src="https://images.unsplash.com/photo-1519681393784-d120267933ba?w=700&q=85&fit=crop" alt="Night sky" loading="lazy">
+      </div>
+      <p class="j-cat">Community</p>
+      <h3 class="j-title">The Women Rewriting Indian Adventure Culture</h3>
+      <p class="j-excerpt">Meet the guides, athletes, and organizers quietly rewriting who the mountains belong to.</p>
+    </div>
+  </div>
+</div>
+
+<!-- ═══ TESTIMONIAL ════════════════════════════════ -->
+<div class="testimonial">
+  <p class="testimonial-label reveal">From the community</p>
+  <div class="testimonial-wrap reveal">
+    <blockquote class="testimonial-quote" id="tq-text">
+      I've worn Arc'teryx and Fjallraven. Nothing has ever fit an Indian body and Indian conditions the way DEWDROPZ does. It feels like it was made for people who actually go.
+    </blockquote>
+    <p class="testimonial-attr" id="tq-attr">— Rahul Mehta, Roopkund 2024 Expedition</p>
+  </div>
+  <div class="testimonial-nav">
+    <button class="t-btn" onclick="changeTestimonial(-1)">←</button>
+    <button class="t-btn" onclick="changeTestimonial(1)">→</button>
+  </div>
+  <div class="testimonial-dots">
+    <div class="t-dot active" onclick="goToTestimonial(0)"></div>
+    <div class="t-dot" onclick="goToTestimonial(1)"></div>
+    <div class="t-dot" onclick="goToTestimonial(2)"></div>
+  </div>
+</div>
+
+<!-- ═══ NEWSLETTER ════════════════════════════════ -->
+<div class="newsletter">
+  <div class="newsletter-bg"></div>
+  <div class="newsletter-watermark">DEWDROPZ</div>
+  <div class="nl-inner reveal">
+    <p class="nl-label">Join the Community</p>
+    <h2 class="nl-title">Stay<br><em>on trail.</em></h2>
+    <p class="nl-sub">Gear drops, trail guides, and field notes — direct to your inbox. No noise. Just the wild stuff.</p>
+    <div class="nl-form">
+      <input type="email" placeholder="Your email address">
+      <button type="submit">Subscribe</button>
+    </div>
+  </div>
+</div>
+
+<!-- ═══ FOOTER ════════════════════════════════════ -->
+<footer>
+  <div class="footer-grid">
+    <div>
+      <a href="#" class="footer-logo">Dewdropz</a>
+      <p class="footer-tagline">"Feel Alive."</p>
+      <p class="footer-about">Premium outdoor gear for the Indian adventurer. Himalayan tested. Trail approved. Built in India, for the wild that is already ours.</p>
+      <div class="footer-socials">
+        <a href="https://www.instagram.com/dewdropz.shop" target="_blank">IG</a>
+        <a href="#">YT</a>
+        <a href="#">FB</a>
+      </div>
+    </div>
+    <div>
+      <p class="footer-col-title">Shop</p>
+      <ul class="footer-links">
+        <li><a href="#">Jackets & Shells</a></li>
+        <li><a href="#">Backpacks</a></li>
+        <li><a href="#">Mid Layers</a></li>
+        <li><a href="#">Footwear</a></li>
+        <li><a href="#">Accessories</a></li>
+        <li><a href="#">New Arrivals</a></li>
+      </ul>
+    </div>
+    <div>
+      <p class="footer-col-title">Explore</p>
+      <ul class="footer-links">
+        <li><a href="#">Our Story</a></li>
+        <li><a href="#">The Journal</a></li>
+        <li><a href="#">Field Reports</a></li>
+        <li><a href="#">Sustainability</a></li>
+        <li><a href="#">Ambassadors</a></li>
+      </ul>
+    </div>
+    <div>
+      <p class="footer-col-title">Help</p>
+      <ul class="footer-links">
+        <li><a href="#">Sizing Guide</a></li>
+        <li><a href="#">Shipping & Returns</a></li>
+        <li><a href="#">Care Instructions</a></li>
+        <li><a href="#">Contact Us</a></li>
+        <li><a href="#">FAQs</a></li>
+      </ul>
+    </div>
+  </div>
+  <div class="footer-bottom">
+    <p class="footer-copy">© 2025 DEWDROPZ. All rights reserved. Made with love in India.</p>
+    <div class="footer-legal">
+      <a href="#">Privacy Policy</a>
+      <a href="#">Terms of Use</a>
+    </div>
+  </div>
+</footer>
+
+<script>
+  /* ── CURSOR ──────────────────────────────── */
+  const dot  = document.getElementById('cursor-dot');
+  const ring = document.getElementById('cursor-ring');
+  const glow = document.getElementById('cursor-glow');
+  let mx=0, my=0, rx=0, ry=0;
+
+  document.addEventListener('mousemove', e => {
+    mx = e.clientX; my = e.clientY;
+    dot.style.left  = mx + 'px';
+    dot.style.top   = my + 'px';
+    glow.style.left = mx + 'px';
+    glow.style.top  = my + 'px';
+  });
+
+  function lerp(a,b,t){ return a+(b-a)*t; }
+  function animateCursor(){
+    rx = lerp(rx, mx, 0.12);
+    ry = lerp(ry, my, 0.12);
+    ring.style.left = rx + 'px';
+    ring.style.top  = ry + 'px';
+    requestAnimationFrame(animateCursor);
+  }
+  animateCursor();
+
+  document.querySelectorAll('a, button').forEach(el => {
+    el.addEventListener('mouseenter', () => {
+      ring.style.width  = '56px';
+      ring.style.height = '56px';
+      ring.style.borderColor = 'rgba(196,164,82,0.8)';
+      dot.style.opacity = '0';
+    });
+    el.addEventListener('mouseleave', () => {
+      ring.style.width  = '36px';
+      ring.style.height = '36px';
+      ring.style.borderColor = 'rgba(196,164,82,0.5)';
+      dot.style.opacity = '1';
+    });
+  });
+
+  /* ── NAV SCROLL ──────────────────────────── */
+  const navbar = document.getElementById('navbar');
+  window.addEventListener('scroll', () => {
+    navbar.classList.toggle('scrolled', window.scrollY > 60);
+  });
+
+  /* ── SCROLL REVEAL ───────────────────────── */
+  const observer = new IntersectionObserver((entries) => {
+    entries.forEach(e => {
+      if(e.isIntersecting) { e.target.classList.add('visible'); }
+    });
+  }, { threshold: 0.12 });
+
+  document.querySelectorAll('.reveal, .reveal-left, .reveal-right').forEach(el => {
+    observer.observe(el);
+  });
+
+  /* ── COUNT UP ────────────────────────────── */
+  function countUp(el, target, suffix){
+    let current = 0;
+    const step = Math.ceil(target / 60);
+    const timer = setInterval(() => {
+      current = Math.min(current + step, target);
+      el.innerHTML = current.toLocaleString() + suffix;
+      if(current >= target) clearInterval(timer);
+    }, 20);
+  }
+
+  const statsObserver = new IntersectionObserver((entries) => {
+    entries.forEach(e => {
+      if(e.isIntersecting){
+        const statEls = document.querySelectorAll('[data-target]');
+        statEls.forEach(el => {
+          const target = parseInt(el.dataset.target);
+          const isFirst = el === statEls[0];
+          const suffix  = isFirst ? '<sup>m</sup>' : (el === statEls[1] ? '<span style="font-size:20px">+</span>' : '');
+          countUp(el, target, suffix);
+          el.removeAttribute('data-target');
+        });
+        statsObserver.disconnect();
+      }
+    });
+  }, { threshold: 0.3 });
+
+  const statsSection = document.querySelector('.story-stats');
+  if(statsSection) statsObserver.observe(statsSection);
+
+  /* ── TESTIMONIALS ────────────────────────── */
+  const testimonials = [
+    {
+      text: "I've worn Arc'teryx and Fjallraven. Nothing has ever fit an Indian body and Indian conditions the way DEWDROPZ does. It feels like it was made for people who actually go.",
+      attr: "— Rahul Mehta, Roopkund 2024 Expedition"
+    },
+    {
+      text: "The Ridgeline jacket kept me dry through a 14-hour whiteout on Kedarkantha. That's not a jacket — that's a promise kept.",
+      attr: "— Priya Sharma, Trek Leader & Mountaineer"
+    },
+    {
+      text: "Finally — an Indian outdoor brand that doesn't feel like a compromise. The Alpine Pack is the best thing on my back at any altitude.",
+      attr: "— Arjun Nair, Zanskar Traverse 2024"
+    }
+  ];
+  let tIndex = 0;
+
+  function updateTestimonial(){
+    document.getElementById('tq-text').textContent = testimonials[tIndex].text;
+    document.getElementById('tq-attr').textContent = testimonials[tIndex].attr;
+    document.querySelectorAll('.t-dot').forEach((d,i) => {
+      d.classList.toggle('active', i === tIndex);
+    });
+  }
+
+  function changeTestimonial(dir){
+    tIndex = (tIndex + dir + testimonials.length) % testimonials.length;
+    updateTestimonial();
+  }
+
+  function goToTestimonial(i){
+    tIndex = i;
+    updateTestimonial();
+  }
+
+  /* ── AUTO CYCLE TESTIMONIAL ──────────────── */
+  setInterval(() => changeTestimonial(1), 6000);
+</script>
+
+</body>
+</html>
